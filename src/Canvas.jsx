@@ -1,43 +1,3 @@
-/*import { useEffect, useRef } from "react";
-
-export const Canvas = ({ grid, width, height, cellSize }) => {
-  const canvasRef = useRef(null);
-
-  useEffect(() => {
-    drawGrid(grid);
-  }, [grid]);
-
-  const drawGrid = (grid) => {
-    const canvas = canvasRef.current;
-    const ctx = canvas.getContext("2d");
-    ctx.clearRect(0, 0, width, height);
-
-    for (let x = 0; x < grid.length; x++) {
-      for (let y = 0; y < grid[x].length; y++) {
-        ctx.fillStyle = getColor(grid[x][y].income_level); // Cambiado de avg_income a income_level
-        ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
-      }
-    }
-  };
-
-  const getColor = (incomeLevel) => {
-    switch (incomeLevel) {
-      case 0:
-        return "blue";
-      case 1:
-        return "yellow";
-      case 2:
-        return "red";
-      default:
-        return "white";
-    }
-  };
-
-  return <canvas ref={canvasRef} width={width} height={height} />;
-};
-
-export default Canvas;
-*/
 import { useEffect, useRef, useState } from "react";
 
 export const Canvas = ({ grid, width, height, cellSize }) => {
@@ -68,11 +28,11 @@ export const Canvas = ({ grid, width, height, cellSize }) => {
 
   const getColor = (incomeLevel) => {
     switch (incomeLevel) {
-      case 0:
+      case "High":
         return "blue";
-      case 1:
+      case "Medium":
         return "yellow";
-      case 2:
+      case "Low":
         return "red";
       default:
         return "white";

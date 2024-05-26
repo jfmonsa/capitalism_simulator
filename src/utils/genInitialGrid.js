@@ -1,12 +1,6 @@
 import { getRandomNormal, getRandomExponential } from "./incomeDistributions";
 import calcIncomeLevel from "./calcIncomeLevel";
 
-const STATES = {
-  POOR: 0,
-  MIDDLE: 1,
-  RICH: 2,
-};
-
 //Aux function
 const getRandomFloat = (min = 0.1, max = 1.0) => {
   return parseFloat((Math.random() * (max - min) + min).toFixed(2));
