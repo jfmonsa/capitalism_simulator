@@ -7,7 +7,7 @@ indice gini de alrededor 0.4 ~ 0.5
 En este contexto, se usa para modelar valores de ingresos promedio (avg_income) que siguen
 una distribución sesgada, donde los valores pequeños son más comunes que los grandes.
 */
-export const getRandomExponential = (lambda = 1.5) => {
+export const getRandomExponential = (lambda = 0.8) => {
   let u = 0;
   while (u === 0) u = Math.random();
   return parseFloat((-Math.log(u) / lambda).toFixed(2));

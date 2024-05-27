@@ -7,7 +7,6 @@ import Stats from "./Stats.jsx";
 // Aux functions
 import generateInitialGrid from "./utils/genInitialGrid";
 import updateGrid from "./utils/updateGrid";
-import calcGiniIndex from "./utils/calcGiniIndex.js";
 import countIncomeLevels from "./utils/countIncomeLevels.js";
 
 // Constants
