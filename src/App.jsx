@@ -55,6 +55,7 @@ const App = () => {
   const zones = countIncomeLevels(grid);
   return (
     <main>
+      <h1>Automata celular</h1>
       <Canvas grid={grid} width={WIDTH} height={HEIGHT} cellSize={CELL_SIZE} />
       <Controls
         onSingleStep={handleSingleStep}
