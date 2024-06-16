@@ -143,9 +143,9 @@ const updateCellState = (cell, neighbors, policy) => {
     // => Aumenta el avg_income de los ricos, desplaza algún porcentaje de la clase media a la pobreza
     case 2:
       if (cell.income_level === "High") { //Si es rico
-        newIncome *= 1.2; // Aumenta ingreso de los ricos
+        newIncome *= 1.02; // Aumenta ingreso de los ricos
       } else if (cell.income_level === "Medium") { //Si es clase media
-        newIncome *= 0.8; // Desplaza clase media a pobreza
+        newIncome *= 0.95; // Desplaza clase media a pobreza
       }
       break;
     // Política socialista democrática
