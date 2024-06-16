@@ -18,6 +18,7 @@ const Controls = ({
       <button onClick={onReset}>Reset</button>
 
       {/* barra de desplazamiento */}
+      <label>Densidad</label>
       <input
         type="range"
         min="500"
