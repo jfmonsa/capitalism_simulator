@@ -1,7 +1,11 @@
+/* eslint-disable react/prop-types */
 import { useEffect, useRef, useState } from "react";
 
 export const Canvas = ({ grid, width, height, cellSize }) => {
+  // Referencia al canvas
   const canvasRef = useRef(null);
+
+  // Estado para el tooltip
   const [tooltip, setTooltip] = useState({
     visible: false,
     x: 0,
@@ -9,23 +13,29 @@ export const Canvas = ({ grid, width, height, cellSize }) => {
     content: "",
   });
 
+  // Cada que cambie el grid, se vuelve a dibujar
   useEffect(() => {
     drawGrid(grid);
   }, [grid]);
 
+  // Dibuja el grid en el canvas
   const drawGrid = (grid) => {
+    // Obtiene el contexto del canvas
     const canvas = canvasRef.current;
+    // Limpia el canvas
     const ctx = canvas.getContext("2d");
     ctx.clearRect(0, 0, width, height);
 
-    for (let x = 0; x < grid.length; x++) {
+    // Dibuja cada celda
+    for (let x = 0; x < grid.length; x++) { 
       for (let y = 0; y < grid[x].length; y++) {
         ctx.fillStyle = getColor(grid[x][y].income_level); // Cambiado de avg_income a income_level
-        ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize);
+        ctx.fillRect(x * cellSize, y * cellSize, cellSize, cellSize); // Ajusta el tamaño de la celda
       }
     }
   };
 
+  // Obtiene el color de la celda dependiendo del nivel de ingreso
   const getColor = (incomeLevel) => {
     switch (incomeLevel) {
       case "High":
@@ -39,6 +49,7 @@ export const Canvas = ({ grid, width, height, cellSize }) => {
     }
   };
 
+  // Muestra el tooltip con la información de la celda
   const handleMouseMove = (e) => {
     const canvas = canvasRef.current;
     const rect = canvas.getBoundingClientRect();
@@ -58,6 +69,7 @@ export const Canvas = ({ grid, width, height, cellSize }) => {
     }
   };
 
+  // Oculta el tooltip
   const handleMouseOut = () => {
     setTooltip({ ...tooltip, visible: false });
   };

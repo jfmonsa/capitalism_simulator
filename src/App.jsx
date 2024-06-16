@@ -7,7 +7,6 @@ import Stats from "./Stats.jsx";
 // Aux functions
 import generateInitialGrid from "./utils/genInitialGrid";
 import updateGrid from "./utils/updateGrid";
-import countIncomeLevels from "./utils/countIncomeLevels.js";
 
 // Constants
 const CELL_SIZE = 10;
@@ -52,7 +51,6 @@ const App = () => {
     setIsRunning(false);
   };
 
-  const zones = countIncomeLevels(grid);
   return (
     <main>
       <Canvas grid={grid} width={WIDTH} height={HEIGHT} cellSize={CELL_SIZE} />
