@@ -13,15 +13,17 @@ let CELL_SIZE = 10;
 
 //main function
 const App = () => {
-  const [grid, setGrid] = useState(() => generateInitialGrid(COLS, ROWS));
-  const [isRunning, setIsRunning] = useState(false);
-  const [selectedPolicy, setSelectedPolicy] = useState(1);
+  
   const [tam, setTam] = useState([500,500]); 
-
   const WIDTH = tam[0];
   const HEIGHT = tam[1];
   const COLS = WIDTH / CELL_SIZE;
   const ROWS = HEIGHT / CELL_SIZE;
+
+  const [grid, setGrid] = useState(() => generateInitialGrid(COLS, ROWS));
+  const [isRunning, setIsRunning] = useState(false);
+  const [selectedPolicy, setSelectedPolicy] = useState(1);
+
 
   const intervalRef = useRef(null);
 
