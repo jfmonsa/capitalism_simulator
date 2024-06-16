@@ -6,13 +6,27 @@ const Controls = ({
   isRunning,
   onPolicyChange,
   selectedPolicy,
+  valueTam,
+  onChangeTam
 }) => {
   return (
     // Componente de controles para gestionar la simulación
     <div className="controls">
+      {/* botones */}
       <button onClick={onSingleStep}>Single Step</button>
       <button onClick={onToggleRunning}>{isRunning ? "Stop" : "Start"}</button>
       <button onClick={onReset}>Reset</button>
+
+      {/* barra de desplazamiento */}
+      <input
+        type="range"
+        min="500"
+        max="1000"
+        value={valueTam[0]}
+        onChange={onChangeTam} />
+      <label>{valueTam[0]}</label>
+
+      {/* Selector de políticas */}
       <select
         value={selectedPolicy}
         onChange={(e) => onPolicyChange(parseInt(e.target.value))}
