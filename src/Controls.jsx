@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 const Controls = ({
   onSingleStep,
   onToggleRunning,
@@ -7,6 +8,7 @@ const Controls = ({
   selectedPolicy,
 }) => {
   return (
+    // Componente de controles para gestionar la simulación
     <div className="controls">
       <button onClick={onSingleStep}>Single Step</button>
       <button onClick={onToggleRunning}>{isRunning ? "Stop" : "Start"}</button>

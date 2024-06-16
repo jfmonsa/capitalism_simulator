@@ -1,6 +1,7 @@
 import getCellInputs from "./getCellInputs.js";
 import calcIncomeLevel from "./calcIncomeLevel";
 
+// Función que obtiene los vecinos de una celda
 const getNeighbors = (grid, x, y) => {
   const neighbors = [];
   //Vecindad de Moore con contigüidad de 1, igual que el juego de la vida
@@ -15,10 +16,12 @@ const getNeighbors = (grid, x, y) => {
     [0, -1],
     [-1, -1],
   ];
-
+  // Iterar sobre las direcciones y obtener los vecinos
   directions.forEach(([dx, dy]) => {
+    // Coordenadas del vecino
     const nx = x + dx;
     const ny = y + dy;
+    // Verificar que las coordenadas estén dentro del grid
     if (nx >= 0 && nx < grid.length && ny >= 0 && ny < grid[0].length) {
       neighbors.push(grid[nx][ny]);
     }
@@ -31,19 +34,23 @@ const getNeighbors = (grid, x, y) => {
   Reglas de transición:
  1. Si una zona rica no tiene al menos dos vecino ricos, su avg income se reduce un 20%, si no tiene al menos 1 un 30%
  2. Si una zona clase media tiene 3 zonas ricas vecinas, su avg income aumenta un +10% en cada iteración, la case baja (+6% para zonas pobres)
- 3. el avg_neighbor mayor a x valor convierte una celula pobre en middle class (convierte el education_level en > 0.6)
+ 3. el avg_neighbor mayor a x valor convierte una célula pobre en middle class (convierte el education_level en > 0.6)
  
- Otras relgas de transición:
+ Otras reglas de transición:
  2. si una zona rica esta solo rodeada por vecinos pobres se convierte en media (pierde el 50% de riqueza)
 
-  Politicas
-  1. politica timidez social-democrata => impuestos a los ricos => Eduación en sectores pobres y servicios publicos => convierte la mayoría de pobres en clase media, ricos pierden el 30% de su income
-  2. politica neoliberal => Aumenta el avg_income de los ricos, desplaza algun porcentaje de la clase media a la pobreza
-  3. politica socialismo democratico => avg income de los vecinos se se reparte en entre todos los vecinos igualitariamente y aumentan en +20% los servicos y educación (por cada iteración)
+  Políticas
+  1. política timidez social-demócrata => impuestos a los ricos => Educación en sectores pobres y servicios públicos => convierte la mayoría de pobres en clase media, ricos pierden el 30% de su income
+  2. política neoliberal => Aumenta el avg_income de los ricos, desplaza algún porcentaje de la clase media a la pobreza
+  3. política socialismo democrático => avg income de los vecinos se se reparte en entre todos los vecinos igualitariamente y aumentan en +20% los servicios y educación (por cada iteración)
   */
+
+  // Función que actualiza el estado de una celda
 const updateCellState = (cell, neighbors, policy) => {
+  // Obtener los inputs de las celdas vecinas
   const cellInputs = getCellInputs(neighbors);
-  /* Cellinputs campos:
+
+  /* CellInputs campos:
       avgNeighborIncome,
       avgNeighborEducation,
       avgNeighborServices,
@@ -51,6 +58,8 @@ const updateCellState = (cell, neighbors, policy) => {
       middleCount,
       richCount
   */
+
+  // Data de la celda relacionada con sus vecinos
   const richNeighbors = cellInputs.richCount;
   const avgNeighborIncome = cellInputs.avgNeighborIncome;
   const totalIncome = cellInputs.totalIncome;
@@ -61,10 +70,11 @@ const updateCellState = (cell, neighbors, policy) => {
 
   // Reglas de transición
   if (cell.income_level === "High" && richNeighbors < 2) {
-    //1. Si una zona rica no tiene al menos dos vecinod ricos, su avg income se reduce un -20%, si no tiene al menos 1 un -30%
-    newIncome *= richNeighbors === 0 ? 0.7 : 0.8;
+    //1. Si una zona rica no tiene al menos dos vecinos ricos, su avg income se reduce un -20%, si no tiene al menos 1 un -30%
+    newIncome *= richNeighbors === 0 ? 0.7 : 0.8; //Ingresos*cantidadVecinosRicos = 0.8 si tiene 1 vecino rico, 0.7 si no tiene vecinos ricos
+  
   } else if (cell.income_level === "Low" && avgNeighborIncome > 0.6) {
-    // 2. Si el avg_services de los vecinos es > 0.6 o education level respectivamente aumenta en en 20% (si no sobrepasa 1)
+    // 2. Si el avg_services de los vecinos es > 0.6 aumenta en en 20% (si no sobrepasa 1)
     newEducation = 0.65; // Convierte pobre en clase media si vecinos tienen alto ingreso
   }
   if (richNeighbors >= 3) {
