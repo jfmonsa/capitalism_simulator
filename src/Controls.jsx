@@ -7,7 +7,9 @@ const Controls = ({
   onPolicyChange,
   selectedPolicy,
   valueTam,
-  onChangeTam
+  onChangeTam,
+  setWithAttraction,
+  withAttraction,
 }) => {
   return (
     // Componente de controles para gestionar la simulación
@@ -26,6 +28,14 @@ const Controls = ({
         value={valueTam[0]}
         onChange={onChangeTam} />
       <label>{valueTam[0]}</label>
+
+      {/* CheckBox */}
+      <label>Atracción</label>
+        <input
+          type="checkbox"
+          checked={withAttraction}
+          onChange={(e) => setWithAttraction(e.target.checked)}
+        />
 
       {/* Selector de políticas */}
       <select

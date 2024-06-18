@@ -30,6 +30,27 @@ const getNeighbors = (grid, x, y) => {
   return neighbors;
 };
 
+// Función que busca la celda con más calidad de servicios
+const findMostAttractive = (grid, x, y) => {
+  let maxAttraction = 0;
+  let cords = [0, 0];
+  for (let i = 0; i < grid.length; i++) {
+    for (let j = 0; j < grid[0].length; j++) {
+      if (grid[i][j].income_level === "High") {
+        const distance = Math.abs(x - i) + Math.abs(y - j);
+        if (distance === 0) continue;
+        // La atracción será el promedio en services.school + services.hospitals + services.public_transport * distancia
+        const attraction = (grid[i][j].services.schools + grid[i][j].services.hospitals + grid[i][j].services.public_transport) * distance;
+        if (attraction > maxAttraction) {
+          maxAttraction = attraction;
+          cords = [i, j];
+        }
+      }
+    }
+  }
+  return cords;
+};
+
 /*
   Reglas de transición:
   1. Si una zona rica no tiene al menos dos vecino ricos, su avg income se reduce un 20%, si no tiene al menos 1 un 30%
@@ -50,7 +71,7 @@ const getNeighbors = (grid, x, y) => {
   */
 
 // Función que actualiza el estado de una celda
-const updateCellState = (cell, neighbors, policy) => {
+const updateCellState = (cell, neighbors, policy, withAttraction) => {
   // Obtener los inputs de las celdas vecinas
   const cellInputs = getCellInputs(neighbors);
 
@@ -120,6 +141,11 @@ const updateCellState = (cell, neighbors, policy) => {
     newIncome -= 0.01 * newIncome;
   }
 
+  // 6. Restricción, no permitir que el avg_income sea menor a 0.1
+  if (newIncome < 0.1) {
+    newIncome = 0.1;
+  }
+
 
   // Aplicar políticas
   switch (policy) {
@@ -129,13 +155,18 @@ const updateCellState = (cell, neighbors, policy) => {
     case 1:
       if (cell.income_level === "High") { //Si es rico
         // Los ricos pierden un porcentaje de su ingreso que depende de su nivel de ingreso
-        newIncome *= 1 - 0.3 * (cell.avg_income/25);
+        if (withAttraction){
+          newIncome *= 1 - 0.3 * (cell.avg_income / 40); // Pierde un porcentaje de su ingreso
+        }else{
+          newIncome *= 1 - 0.2 * (cell.avg_income / 20); // Pierde un porcentaje de su ingreso
+        }
+        // La celda rica se juntará con la celda rica mas cercana
       } else if (cell.income_level === "Low") { //Si es pobre
         newEducation = Math.min(newEducation + 0.2, 0.8); // Mejora educación. 
         newServices = {
-          schools: newServices.schools <= 0.5 ? Math.min(newServices.schools + 0.2, 0.8) : newServices.schools, // Si no pasa de 0.8 mejora servicios educativos
-          hospitals: newServices.hospitals <= 0.5 ? Math.min(newServices.hospitals + 0.2, 0.8) : newServices.hospitals, // Si no pasa de 0.8 mejora servicios de salud
-          public_transport: newServices.public_transport <= 0.5 ? Math.min(newServices.public_transport + 0.2, 0.8) : newServices.public_transport, // Si no pasa de 0.8 mejora transporte público
+          schools: newServices.schools <= 0.5 ? Math.min(newServices.schools + 0.2, 0.8) : newServices.schools, // Si no pasa de 0.5 mejora servicios educativos
+          hospitals: newServices.hospitals <= 0.5 ? Math.min(newServices.hospitals + 0.2, 0.8) : newServices.hospitals, // Si no pasa de 0.5 mejora servicios de salud
+          public_transport: newServices.public_transport <= 0.5 ? Math.min(newServices.public_transport + 0.2, 0.8) : newServices.public_transport, // Si no pasa de 0.5 mejora transporte público
         }; // Mejora servicios públicos
       }
       break;
@@ -178,11 +209,41 @@ const updateCellState = (cell, neighbors, policy) => {
   };
 };
 
-const updateGrid = (grid, selectedPolicy) => {
+function moveOneStep(grid, x1, y1, x2, y2) {
+  // Calcula la dirección en la que mover la celda
+  const dx = Math.sign(x2 - x1);
+  const dy = Math.sign(y2 - y1);
+
+  // Asegúrate de que la nueva posición esté dentro del grid
+  const newX = Math.max(0, Math.min(grid.length - 1, x1 + dx));
+  const newY = Math.max(0, Math.min(grid[0].length - 1, y1 + dy));
+
+  // Intercambia la celda con la celda en la nueva posición
+  const temp = grid[x1][y1];
+  grid[x1][y1] = grid[newX][newY];
+  grid[newX][newY] = temp;
+}
+
+const updateGrid = (grid, selectedPolicy,withAttraction) => {
+  // Grid con estados actualizados
   const newGrid = grid.map((col, x) =>
     col.map((cell, y) => {
       const neighbors = getNeighbors(grid, x, y);
-      return updateCellState(cell, neighbors, selectedPolicy);
+      return updateCellState(cell, neighbors, selectedPolicy, withAttraction);
+    })
+  );
+  if (!withAttraction) {
+    return newGrid;
+  }
+  // Grid con celdas ricas más cercanas en 1 unidad
+  grid.forEach((col, x) =>
+    col.forEach((cell, y) => {
+      if (cell.income_level === "High") {
+        const nearRichCords = findMostAttractive(newGrid, x, y);
+        if (nearRichCords) {
+          moveOneStep(newGrid, x, y, nearRichCords[0], nearRichCords[1]);
+        }
+      }
     })
   );
 

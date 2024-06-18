@@ -23,12 +23,13 @@ const App = () => {
   const [grid, setGrid] = useState(() => generateInitialGrid(COLS, ROWS));
   const [isRunning, setIsRunning] = useState(false);
   const [selectedPolicy, setSelectedPolicy] = useState(1);
+  const [withAttraction, setWithAttraction] = useState(false);
 
 
   const intervalRef = useRef(null);
 
   const handleSingleStep = () => {
-    setGrid((prevGrid) => updateGrid(prevGrid, selectedPolicy));
+    setGrid((prevGrid) => updateGrid(prevGrid, selectedPolicy, withAttraction));
   };
 
   const handleToggleRunning = () => {
@@ -36,7 +37,7 @@ const App = () => {
       clearInterval(intervalRef.current);
     } else {
       intervalRef.current = setInterval(() => {
-        setGrid((prevGrid) => updateGrid(prevGrid, selectedPolicy));
+        setGrid((prevGrid) => updateGrid(prevGrid, selectedPolicy, withAttraction));
       }, 100); // Intervalo ajustado a 100ms
     }
     setIsRunning(!isRunning);
@@ -70,13 +71,21 @@ const App = () => {
       <Canvas grid={grid} width={WIDTH} height={HEIGHT} cellSize={CELL_SIZE} />
       <Controls
         onSingleStep={handleSingleStep}
+
         onToggleRunning={handleToggleRunning}
+
         isRunning={isRunning}
+
         onPolicyChange={handlePolicyChange}
         selectedPolicy={selectedPolicy}
+        
         onReset={handleReset}
+
         valueTam={tam}
         onChangeTam={handleChange}
+
+        withAttraction={withAttraction}
+        setWithAttraction={setWithAttraction}
       />
       <Stats grid={grid} totalCells={COLS * ROWS}></Stats>
     </main>
