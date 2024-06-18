@@ -44,7 +44,7 @@ const Controls = ({
       >
         <option value={1}>Política 1: Social democracía timida</option>
         <option value={2}>Política 2: Neoliberalismo desatado</option>
-        <option value={3}>Política 1: Socialismo democratico</option>
+        <option value={3}>Política 3: Socialismo democratico</option>
       </select>
     </div>
   );
