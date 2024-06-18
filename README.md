@@ -33,7 +33,7 @@ git clone <URL_DEL_REPOSITORIO>
 3. Abre tu navegador y navega a `http://localhost:5173/` o simplemente da ctrl + click izq sobre el link que te muestra al iniciar la aplicación.
 
 ## Ejecución (segunda forma)
-2. Abre tu navegador y navega a https://vidaartificial.netlify.app/
+2. Abre tu navegador y navega a https://capitalismsim.netlify.app/
 
 ## Uso de la Aplicación
 Una vez que la aplicación esté corriendo, verás una interfaz gráfica con varios componentes y botones que te permitirán interactuar con la simulación.
