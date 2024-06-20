@@ -40,7 +40,7 @@ const findMostAttractive = (grid, x, y) => {
         const distance = Math.abs(x - i) + Math.abs(y - j);
         if (distance === 0) continue;
         // La atracción será el promedio en services.school + services.hospitals + services.public_transport * distancia
-        const attraction = (grid[i][j].services.schools + grid[i][j].services.hospitals + grid[i][j].services.public_transport) * distance;
+        const attraction = (grid[i][j].services.schools + grid[i][j].services.hospitals + grid[i][j].services.public_transport) * Math.pow(2, distance);
         if (attraction > maxAttraction) {
           maxAttraction = attraction;
           cords = [i, j];
