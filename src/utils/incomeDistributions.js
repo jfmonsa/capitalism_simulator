@@ -9,7 +9,10 @@ una distribución sesgada, donde los valores pequeños son más comunes que los 
 */
 export const getRandomExponential = (lambda = 0.8) => {
   let u = 0;
+  // Generamos un número aleatorio distinto de cero. Este número representa un evento aleatorio que sigue una distribución uniforme.
   while (u === 0) u = Math.random();
+  // Transformamos el número aleatorio uniforme en un número aleatorio exponencial utilizando la función inversa de la función de distribución acumulativa de la distribución exponencial.
+  // Luego, redondeamos el resultado a dos decimales y lo convertimos a un número flotante.
   return parseFloat((-Math.log(u) / lambda).toFixed(2));
 };
 
